@@ -7,12 +7,19 @@ function getCamputerChoice(){
         console.log("Paper!");
     } else if(percentage >= 67 && percentage <= 100){
         console.log("Scissors!");
-    } else{
-        console.log("Error!");
-        console.log("Unexpected number!")
     }
 }
-for(let i = 0; i < 10; i++){
-    getCamputerChoice();
+
+function getHumanChoice(){
+    let tip = prompt("Select: Rock! Paper! or Scissors!");
+    if(tip.toLowerCase() === "rock"){
+        console.log("Rock!");
+    }else if(tip.toLowerCase() === "paper"){
+        console.log("Paper!");
+    }else if(tip.toLowerCase() === "scissors"){
+        console.log("Scissors!");
+    }
 }
 
+getHumanChoice();
+getCamputerChoice();
