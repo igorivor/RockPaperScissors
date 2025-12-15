@@ -5,11 +5,20 @@ let tie = 0;
 const btn_Rock = document.querySelector("#btn_Rock");
 const btn_Paper = document.querySelector("#btn_Paper");
 const btn_Scissors = document.querySelector("#btn_Scissors");
-const msg_Resualt = document.querySelector(".resualts")
+const msg_Victory = document.querySelector(".victory");
+const msg_Human = document.querySelector(".human");
+const msg_Computer = document.querySelector(".computer");
+const msg_Tie = document.querySelector(".tie");
 
 btn_Rock.addEventListener("click",() => playGame("rock"));
 btn_Paper.addEventListener("click",() => playGame("paper"));
 btn_Scissors.addEventListener("click",() => playGame("scissors"));
+
+function setButtonsEnabled(enabled) {
+  btn_Rock.disabled = !enabled;// ! is logical operator NOT 
+  btn_Paper.disabled = !enabled;
+  btn_Scissors.disabled = !enabled;
+}
 
 function getComputerChoice(){
     let percentage = 0;
@@ -23,52 +32,57 @@ function getComputerChoice(){
     }
 }
 
-function playRound(humanSelection, computerSelection){
-    const prf_Round = document.createElement("p")
-    if(humanSelection.toLowerCase() === "rock" && computerSelection.toLowerCase() === "rock" ){
-        prf_Round.textContent = "Tie! Same selection!";
-        msg_Resualt.appendChild(prf_Round);
-        return -1;
-    }else if(humanSelection.toLowerCase() === "rock" && computerSelection.toLowerCase() === "paper" ){
-        prf_Round.textContent = "Computer Victory! Paper beats Rock!";
-        msg_Resualt.appendChild(prf_Round);
-        return 0;
-    }else if(humanSelection.toLowerCase() === "rock" && computerSelection.toLowerCase() === "scissors" ){
-        prf_Round.textContent = "Human Victory! Rock beats Scissors!";
-        msg_Resualt.appendChild(prf_Round);
-        return 1;
-    }else if(humanSelection.toLowerCase() === "paper" && computerSelection.toLowerCase() === "paper" ){
-        prf_Round.textContent = "Tie! Same selection!";
-        msg_Resualt.appendChild(prf_Round);
-        return -1;
-    }else if(humanSelection.toLowerCase() === "paper" && computerSelection.toLowerCase() === "rock" ){
-        prf_Round.textContent = "Human Victory! Paper beats Rock!";
-        msg_Resualt.appendChild(prf_Round);
-        return 1;
-    }else if(humanSelection.toLowerCase() === "paper" && computerSelection.toLowerCase() === "scissors" ){
-        prf_Round.textContent = "Computer Victory! Scissors beats Paper!";
-        msg_Resualt.appendChild(prf_Round);
-        return 0;
-    }else if(humanSelection.toLowerCase() === "scissors" && computerSelection.toLowerCase() === "scissors" ){
-        prf_Round.textContent = "Tie! Same selection!";
-        msg_Resualt.appendChild(prf_Round);
-        return -1;
-    }else if(humanSelection.toLowerCase() === "scissors" && computerSelection.toLowerCase() === "paper" ){
-        prf_Round.textContent = "Human Victory! Scissors beats Paper!";
-        msg_Resualt.appendChild(prf_Round);
-        return 1;
-    }else if(humanSelection.toLowerCase() === "scissors" && computerSelection.toLowerCase() === "rock" ){
-        prf_Round.textContent = "Computer Victory! Rock beats Scissors!";
-        msg_Resualt.appendChild(prf_Round);
-        return 0;
-    }
+function playRound(humanSelection, computerSelection) {
+
+  const human = humanSelection.toLowerCase();
+  const computer = computerSelection.toLowerCase();
+
+  const dv_human = document.createElement("div");
+  const dv_computer = document.createElement("div");
+  const dv_tie = document.createElement("div");
+
+  dv_human.classList.add("human-result");
+  dv_computer.classList.add("computer-result");
+  dv_tie.classList.add("tie-result");
+
+
+  if (
+    (human === "rock" && computer === "scissors") ||
+    (human === "paper" && computer === "rock") ||
+    (human === "scissors" && computer === "paper")
+  ) {
+    dv_human.textContent = "Human victory!";
+    msg_Human.appendChild(dv_human);
+    return 1;
+  }
+
+
+  if (
+    (human === "rock" && computer === "paper") ||
+    (human === "paper" && computer === "scissors") ||
+    (human === "scissors" && computer === "rock")
+  ) {
+    dv_computer.textContent = "Computer victory!";
+    msg_Computer.appendChild(dv_computer);
+    return 0;
+  }
+
+  dv_tie.textContent = "Tie!";
+  msg_Tie.appendChild(dv_tie);
+  return -1;
 }
+
 
 function playGame(humanChoice){
 
     const prf_Game = document.createElement("p");
+    prf_Game.classList.add("game-result");
     const humanSelection = humanChoice;
     const computerSelection = getComputerChoice();
+    const btn_Restart = document.createElement("button");
+    btn_Restart.classList.add("restart");
+    btn_Restart.textContent = "Restart Game!";
+
     let score = playRound(humanSelection,computerSelection); 
 
     if(score == 0){
@@ -83,19 +97,41 @@ function playGame(humanChoice){
 
    
     if(humanScore === 5){
-        const prf_Game = document.createElement("p");
         prf_Game.textContent = `Human Won Game! Score: ${humanScore}:${computerScore} with ${tie} ties!`;
-        msg_Resualt.appendChild(prf_Game);
-        humanScore = 0;
-        computerScore = 0;
-        tie = 0;
+        msg_Victory.appendChild(prf_Game);
+        msg_Victory.appendChild(btn_Restart);
+
+        setButtonsEnabled(false);
+
+        btn_Restart.addEventListener("click", () => {
+            humanScore = 0;
+            computerScore = 0;
+            tie = 0;
+            msg_Victory.innerHTML = "";
+            msg_Human.innerHTML = "";
+            msg_Computer.innerHTML = "";
+            msg_Tie.innerHTML = "";
+            setButtonsEnabled(true);
+        })
+
     }else if(computerScore === 5){
-        const prf_Game = document.createElement("p");
         prf_Game.textContent = `Computer Won Game! Score: ${computerScore}:${humanScore} with ${tie} ties!`;
-        msg_Resualt.appendChild(prf_Game);
-        humanScore = 0;
-        computerScore = 0;
-        tie = 0;
+        msg_Victory.appendChild(prf_Game);
+        msg_Victory.appendChild(btn_Restart);
+
+        setButtonsEnabled(false);
+
+        btn_Restart.addEventListener("click", () => {
+            humanScore = 0;
+            computerScore = 0;
+            tie = 0;
+            msg_Victory.innerHTML = "";
+            msg_Human.innerHTML = "";
+            msg_Computer.innerHTML = "";
+            msg_Tie.innerHTML = "";
+            setButtonsEnabled(true);
+        })
+        
     }
 }
 
